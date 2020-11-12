@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "type_traits": "cpp",
+        "cmath": "cpp",
+        "limits": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "typeinfo": "c"
+    }
+}
