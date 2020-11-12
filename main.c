@@ -55,12 +55,12 @@ void readDept(FILE *input, char *name)
         char *preReqs = (char *)malloc(MAX * sizeof(char));
         char *token = (char *)malloc(MAX * sizeof(char));
 
-        fgets(name, MAX, input);
-        name = strtok(name, "\n");
-        name = cleanInput(name);
         fgets(code, MAX, input);
         code = strtok(code, "\n");
         code = cleanInput(code);
+        fgets(name, MAX, input);
+        name = strtok(name, "\n");
+        name = cleanInput(name);
         fgets(preReqs, MAX, input);
 
         Course *course = createCourse(code, name);

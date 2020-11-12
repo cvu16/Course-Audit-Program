@@ -189,3 +189,104 @@ CourseBSTNode *searchCourseBSTNode(CourseBSTNode *root, char *courseCode)
         return searchCourseBSTNode(root->right, courseCode);
     }
 }
+
+/* Given a non-empty binary search 
+   tree, return the node
+   with minimum key value found in
+   that tree. Note that the
+   entire tree does not need to be searched. */
+CourseBSTNode *minValueNode(CourseBSTNode *root)
+{
+    CourseBSTNode *current = root;
+
+    /* loop down to find the leftmost leaf */
+    while (current && current->left != NULL)
+        current = current->left;
+
+    return current;
+}
+
+/*
+Function: removeCourseBSTNode
+-------------------------------------------------
+Search for a node in the bst by code of course and remove it.
+Go through the bst nodes in a recursive fashion.
+
+param:
+root: pointer to the root node
+courseCode: code of the wanted course
+
+*/
+CourseBSTNode *removeCourseBSTNode(CourseBSTNode *root, char *courseCode)
+{
+    // base case
+    if (root == NULL)
+        return root;
+    int cmp = strcmp(courseCode, root->course->code);
+    // If the key to be deleted
+    // is smaller than the root's
+    // key, then it lies in left subtree
+    if (cmp < 0)
+        root->left = removeCourseBSTNode(root->left, courseCode);
+
+    // If the key to be deleted
+    // is greater than the root's
+    // key, then it lies in right subtree
+    else if (cmp > 0)
+        root->right = removeCourseBSTNode(root->right, courseCode);
+
+    // if key is same as root's key,
+    // then This is the node
+    // to be deleted
+    else
+    {
+        // node with only one child or no child
+        if (root->left == NULL)
+        {
+            CourseBSTNode *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            CourseBSTNode *temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // node with two children:
+        // Get the inorder successor
+        // (smallest in the right subtree)
+        CourseBSTNode *temp = minValueNode(root->right);
+
+        // Copy the inorder
+        // successor's content to this node
+        root->course = temp->course;
+
+        // Delete the inorder successor
+        root->right = removeCourseBSTNode(root->right, temp->course->code);
+    }
+    return root;
+}
+
+/*
+Wrapper function for the removeCourseBSTNode function
+*/
+CourseBSTNode *removeCourseBST(CourseBST *bst, char *courseCode)
+{
+    if (bst == NULL)
+    {
+        printf("NULL CourseBST\n");
+        return NULL;
+    }
+    else if (bst->root == NULL)
+    {
+        printf("Empty Course BST\n");
+        return NULL;
+    }
+    else
+    {
+        bst->root = removeCourseBSTNode(bst->root, courseCode);
+        return bst->root;
+    }
+}

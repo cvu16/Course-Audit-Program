@@ -8,6 +8,6 @@ typedef struct CourseLinkedList
 extern CourseLinkedList *createCourseLinkedList();
 extern void printCourseLinkedList(CourseLinkedList *list);
 extern void insertCourseLinkedList(CourseLinkedList *list, char *newData);
-extern int searchCourseLinkedList(CourseLinkedList *list, char *tar);
+extern CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar);
 
 #endif

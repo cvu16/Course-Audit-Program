@@ -84,17 +84,7 @@ list: pointer to the course linked list
 tar: the course code name to be searcher for
 
 */
-int searchCourseLinkedList(CourseLinkedList *list, char *tar)
+CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar)
 {
-    if (list == NULL || list->first == NULL)
-        return -1;
-    CourseNode *curr = list->first;
-    while (curr != NULL)
-    {
-        if (strcmp(curr->data, tar) == 0)
-            return 1;
-        else
-            curr = curr->next;
-    }
-    return 0;
+    return NULL;
 }

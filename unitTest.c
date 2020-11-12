@@ -24,6 +24,7 @@ void main()
     insertCourseBST(bst, course2);
     insertCourseBST(bst, course3);
     insertCourseBST(bst, course4);
-    printBSTNode(searchCourseBST(bst, "Psych 210"));
-    //printBST(bst);
+    removeCourseBST(bst, "Psych 200");
+    printBST(bst);
+    //printBSTNode(searchCourseBST(bst, "Psych 200"));
 }
