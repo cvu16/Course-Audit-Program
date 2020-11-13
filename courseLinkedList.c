@@ -86,5 +86,68 @@ tar: the course code name to be searcher for
 */
 CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar)
 {
+    if (list->first == NULL)
+    {
+        printf("Searching empty LinkedList\n");
+        return NULL;
+    }
+    CourseNode *curr = list->first;
+    while (curr != NULL)
+    {
+        if (strcmp(curr->data, tar) == 0)
+            return list;
+        else
+            curr = curr->next;
+    }
+    return NULL;
+}
+
+/*
+Function : removeCourseLinkedList
+------------------------------------------
+Search in the linked list to find the code name of the course and remove it
+
+list: pointer to the course linked list
+tar: the course code name to be searcher for
+
+*/
+CourseLinkedList *removeCourseLinkedList(CourseLinkedList *list, char *tar)
+{
+    if (list->first == NULL)
+    {
+        printf("Removing empty LinkedList\n");
+        return NULL;
+    }
+    CourseNode *curr = list->first;
+
+    //Edge case: removing the first node
+    if (strcmp(curr->data, tar) == 0)
+    {
+        if (curr->next != NULL)
+        {
+            list->first = curr->next;
+            curr->next->prev == NULL;
+        }
+        free(curr);
+        return list;
+    }
+    while (curr != NULL)
+    {
+        if (strcmp(curr->data, tar) == 0)
+        {
+            if (curr->prev != NULL)
+            {
+                curr->prev->next == NULL;
+            }
+            if (curr->next != NULL)
+            {
+                curr->next->prev == NULL;
+            }
+            free(curr);
+            return list;
+        }
+        else
+            curr = curr->next;
+    }
     return NULL;
 }

@@ -48,7 +48,55 @@ c: pointer to the course
 */
 void printCourse(Course *c)
 {
+    if (c == NULL)
+    {
+        printf("Course not found\n");
+        return;
+    }
     printf("%s\n", c->code);
     printf("%s\n", c->name);
     printCourseLinkedList(c->pre);
+}
+
+/*
+Function : searchPrereqInCourse
+----------------------------------
+Search to see if this prereq in in the list for this course
+Return the course pointer if it does
+
+course: course pointer
+tar: the course code to search for
+*/
+Course *searchPrereqInCourse(Course *course, char *tar)
+{
+    CourseLinkedList *res = searchCourseLinkedList(course->pre, tar);
+    if (res == NULL)
+    {
+        return NULL;
+    }
+    else
+        return course;
+}
+
+/*
+Function : removePrereqInCourse
+----------------------------------
+Search to see if this prereq in in the list for this course
+Remove the prereq from the course
+
+course: course pointer
+tar: the course code to search for
+*/
+Course *removePrereqInCourse(Course *course, char *tar)
+{
+    CourseLinkedList *res = removeCourseLinkedList(course->pre, tar);
+    if (res == NULL)
+    {
+        return NULL;
+    }
+    else
+    {
+        course->pre = res;
+        return course;
+    }
 }

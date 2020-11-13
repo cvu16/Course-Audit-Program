@@ -9,5 +9,6 @@ extern CourseLinkedList *createCourseLinkedList();
 extern void printCourseLinkedList(CourseLinkedList *list);
 extern void insertCourseLinkedList(CourseLinkedList *list, char *newData);
 extern CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar);
+extern CourseLinkedList *removeCourseLinkedList(CourseLinkedList *list, char *tar);
 
 #endif
