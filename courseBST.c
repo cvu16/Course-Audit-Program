@@ -290,3 +290,40 @@ CourseBSTNode *removeCourseBST(CourseBST *bst, char *courseCode)
         return bst->root;
     }
 }
+
+/*
+Function: checkPrereqCourseBST
+--------------------------------
+Run search prereq through all the courses within the bst.
+If the searchprereq function returns something that isn't null,
+add the course's code to a new CLL and return this.
+
+
+*/
+CourseLinkedList *checkPrereqCourseBST(CourseBST *bst, char *courseCode)
+{
+    CourseLinkedList *cll = createCourseLinkedList();
+    CourseBSTNode *curr = bst->root;
+    //Traverse the left subtree
+    while (curr != NULL)
+    {
+        Course *course = searchPrereqInCourse(curr->course, courseCode);
+        if (course != NULL)
+        {
+            insertCourseLinkedList(cll, course->code);
+        }
+        curr = curr->right;
+    }
+    //Traverse the left subtree
+    curr = bst->root;
+    while (curr != NULL)
+    {
+        Course *course = searchPrereqInCourse(curr->course, courseCode);
+        if (course != NULL)
+        {
+            insertCourseLinkedList(cll, course->code);
+        }
+        curr = curr->left;
+    }
+    return cll;
+}

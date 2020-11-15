@@ -60,11 +60,35 @@ void main()
 }
 */
 
+/*
+Unit tests for removing, adding and searching prereqs in a course
 void main()
 {
-    Course *c = createCourse("Psych 320", "Intro to Psych");
+    Course *c = createCourse("Psych 320", "Advance to Psych");
     addCourseReq(c, "Psych 110");
     addCourseReq(c, "Psych 220");
     removePrereqInCourse(c, "Psych 110");
     printCourse(searchPrereqInCourse(c, "Psych 110"));
+}
+*/
+
+void main()
+{
+    Course *c1 = createCourse("Psych 320", "Advance to Psych");
+    addCourseReq(c1, "Psych 110");
+    addCourseReq(c1, "Psych 220");
+    Course *c2 = createCourse("Psych 444", "Advance B to Psych");
+    addCourseReq(c2, "Psych 333");
+    addCourseReq(c2, "Psych 222");
+    Course *c3 = createCourse("Psych 555", "Advance C to Psych");
+    addCourseReq(c3, "Psych 444");
+    addCourseReq(c3, "Psych 333");
+    CourseBST *cbst = createCourseBST();
+    insertCourseBST(cbst, c1);
+    insertCourseBST(cbst, c2);
+    insertCourseBST(cbst, c3);
+    //printBST(cbst);
+    printCourseLinkedList(checkPrereqCourseBST(cbst, "Psych 333"));
+    removePrereqInCourse(c3, "Psych 333");
+    printCourseLinkedList(checkPrereqCourseBST(cbst, "Psych 333"));
 }
