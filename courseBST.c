@@ -120,12 +120,18 @@ bst: pointer to the bst
 */
 void printBST(CourseBST *bst)
 {
-    if (bst != NULL)
+    if (bst == NULL)
+    {
+        printf("This course bst doesn't exist.\n");
+    }
+    else if (bst->root == NULL)
+    {
+        printf("There is no course in this course bst.\n");
+    }
+    else if (bst != NULL)
     {
         printBSTNode(bst->root);
     }
-    else
-        printf("BST is NULL\n");
 }
 
 /*
@@ -297,8 +303,6 @@ Function: checkPrereqCourseBST
 Run search prereq through all the courses within the bst.
 If the searchprereq function returns something that isn't null,
 add the course's code to a new CLL and return this.
-
-
 */
 CourseLinkedList *checkPrereqCourseBST(CourseBST *bst, char *courseCode)
 {
@@ -326,4 +330,29 @@ CourseLinkedList *checkPrereqCourseBST(CourseBST *bst, char *courseCode)
         curr = curr->left;
     }
     return cll;
+}
+
+/*
+Function: removePrereqCourseBST
+--------------------------------
+Run search prereq through all the courses within the bst.
+If the searchprereq function returns something that isn't null,
+add the course's code to a new CLL and return this.
+*/
+void removePrereqCourseBST(CourseBST *bst, char *courseCode)
+{
+    CourseBSTNode *curr = bst->root;
+    //Traverse the right subtree
+    while (curr != NULL)
+    {
+        removePrereqInCourse(curr->course, courseCode);
+        curr = curr->right;
+    }
+    //Traverse the left subtree
+    curr = bst->root;
+    while (curr != NULL)
+    {
+        removePrereqInCourse(curr->course, courseCode);
+        curr = curr->left;
+    }
 }

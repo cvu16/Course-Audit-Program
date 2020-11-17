@@ -12,6 +12,7 @@ Include has to be re-written for each test (I mean isn't that the point)
 #include "courseLinkedList.h"
 #include "course.h"
 #include "courseBST.h"
+#include "department.h"
 
 /* CourseBST Unit Test
 void main()
@@ -61,14 +62,16 @@ void main()
 */
 
 /*
-Unit tests for removing, adding and searching prereqs in a course
+//Unit tests for removing, adding and searching prereqs in a course
 void main()
 {
     Course *c = createCourse("Psych 320", "Advance to Psych");
     addCourseReq(c, "Psych 110");
     addCourseReq(c, "Psych 220");
-    removePrereqInCourse(c, "Psych 110");
-    printCourse(searchPrereqInCourse(c, "Psych 110"));
+    addCourseReq(c, "Psych 223");
+    removePrereqInCourse(c, "Psych 220");
+    printCourse(c);
+    //printCourse(searchPrereqInCourse(c, "Psych 110"));
 }
 */
 
@@ -88,7 +91,12 @@ void main()
     insertCourseBST(cbst, c2);
     insertCourseBST(cbst, c3);
     //printBST(cbst);
-    printCourseLinkedList(checkPrereqCourseBST(cbst, "Psych 333"));
-    removePrereqInCourse(c3, "Psych 333");
-    printCourseLinkedList(checkPrereqCourseBST(cbst, "Psych 333"));
+    Department *dept = createDept("Psychology");
+    addCourseDept(dept, c1);
+    addCourseDept(dept, c2);
+    addCourseDept(dept, c3);
+    //removeCourseDept(dept, "Psych 555");
+    removePrereqDept(dept, "Psych 333");
+    printDept(dept);
+    //printDept(dept);
 }

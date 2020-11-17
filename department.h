@@ -6,13 +6,13 @@
 typedef struct Department
 {
     char *name;
-    struct DegreeArrayList *deg;
-    struct CourseArrayList *courses;
+    struct CourseBST *courses;
 } Department;
 
 extern Department *createDept(char *name);
 extern void addCourseDept(Department *dept, Course *course);
-extern void addDegDept(Department *dept, Degree *deg);
+extern void removeCourseDept(Department *dept, char *courseCode);
+extern void removePrereqDept(Department *dept, char *courseCode);
 extern void printDept(Department *dept);
 extern void checkPreReq(Department *dept, char *code);
 

@@ -4,39 +4,43 @@
 #include "course.h"
 #include "degree.h"
 #include "degreeArrayList.h"
-#include "courseArrayList.h"
+#include "courseBST.h"
 #include "department.h"
 
 Department *createDept(char *name)
 {
     Department *dept = (Department *)malloc(sizeof(Department));
     dept->name = name;
-    dept->deg = createDegreeArrayList();
-    dept->courses = createCourseArrayList();
+    dept->courses = createCourseBST();
 }
 
 void addCourseDept(Department *dept, Course *course)
 {
-    insertCourseArrayList(dept->courses, course);
+    insertCourseBST(dept->courses, course);
 }
 
-void addDegDept(Department *dept, Degree *deg)
+void removeCourseDept(Department *dept, char *courseCode)
 {
-    insertDegreeArrayList(dept->deg, deg);
+    removeCourseBST(dept->courses, courseCode);
+}
+
+void removePrereqDept(Department *dept, char *courseCode)
+{
+    removePrereqCourseBST(dept->courses, courseCode);
 }
 
 void printDept(Department *dept)
 {
     printf("%s\n", dept->name);
-    printCourseArrayList(dept->courses);
+    printBST(dept->courses);
 }
 
 void checkPreReq(Department *dept, char *code)
 {
-    if (dept == NULL || dept->courses->list == NULL)
+    if (dept == NULL || dept->courses == NULL)
     {
-        printf("Department is Null");
+        printf("Department is Null or Empty");
         return;
     }
-    checkCourseReq(dept->courses, code);
+    checkPrereqCourseBST(dept->courses, code);
 }

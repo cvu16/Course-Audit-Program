@@ -24,6 +24,7 @@ extern CourseBSTNode *removeBSTNode(CourseBSTNode *root, char *courseCode);
 extern CourseBSTNode *removeCourseBST(CourseBST *bst, char *courseCode);
 extern CourseBSTNode *minValueNode(CourseBSTNode *root);
 extern CourseLinkedList *checkPrereqCourseBST(CourseBST *bst, char *courseCode);
+extern void removePrereqCourseBST(CourseBST *bst, char *courseCode);
 extern void printBSTNode(CourseBSTNode *root);
 extern void printBST(CourseBST *bst);
 

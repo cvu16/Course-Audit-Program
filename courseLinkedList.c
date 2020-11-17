@@ -47,6 +47,7 @@ void printCourseLinkedList(CourseLinkedList *list)
         return;
     }
     printNode(first);
+    printf("\n");
 }
 
 /*
@@ -123,11 +124,9 @@ CourseLinkedList *removeCourseLinkedList(CourseLinkedList *list, char *tar)
     //Edge case: removing the first node
     if (strcmp(curr->data, tar) == 0)
     {
-        if (curr->next != NULL)
-        {
-            list->first = curr->next;
-            curr->next->prev == NULL;
-        }
+        list->first = curr->next;
+        if (list->first != NULL)
+            list->first->prev = NULL;
         free(curr);
         return list;
     }
@@ -135,13 +134,14 @@ CourseLinkedList *removeCourseLinkedList(CourseLinkedList *list, char *tar)
     {
         if (strcmp(curr->data, tar) == 0)
         {
-            if (curr->prev != NULL)
-            {
-                curr->prev->next == NULL;
-            }
             if (curr->next != NULL)
             {
-                curr->next->prev == NULL;
+                curr->next->prev = curr->prev;
+                curr->prev->next = curr->next;
+            }
+            else
+            {
+                curr->prev->next = NULL;
             }
             free(curr);
             return list;
