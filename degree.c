@@ -23,34 +23,19 @@ Degree *createDeg(char *name)
 }
 
 /*
-Function : addCourseDeg
-------------------------------------------
-Add a new course into the DegreeReq
+Function: setDegReq
+--------------------------
 
-deg: pointer to the degree
-newCourse: the new course to be added
-or: the prerequisite for this newCourse, if nothing then ""
 
 */
-void addCourseDeg(Degree *deg, char *newCourse, char * or)
+void setDegReq(Degree *deg, DegreeReq *dr)
 {
-    int search = searchCourseDegreeReq(deg->req, or);
-    DegreeReq *degreeReq = deg->req;
-    if (degreeReq == NULL)
+    if (dr == NULL)
     {
-        printf("Something is NULL\n");
+        printf("Null deg req to put into degree\n");
         return;
     }
-    if (search != -1)
-    {
-        insertCourseLinkedList(degreeReq->list[search], newCourse);
-    }
-    else
-    {
-        CourseLinkedList *cll = createCourseLinkedList();
-        insertCourseLinkedList(cll, newCourse);
-        insertDegreeReq(deg->req, cll);
-    }
+    deg->req = dr;
 }
 
 /*

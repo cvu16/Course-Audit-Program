@@ -2,126 +2,248 @@
 #include <stdlib.h>
 #include <string.h>
 #include "courseLinkedList.h"
+#include "courseNode.h"
 #include "degreeReq.h"
 
 /*
-Function : createDegreeReq
-------------------------------------------
-Create a new DegreeReq
+Function: createDegreeReq
+-------------------------------------------------
+Returns a pointer to a newly allocated degree requirement bst
 
-return: pointer to a new DegreeReq
-
+return: pointer to a new binary search tree
 */
 DegreeReq *createDegreeReq()
 {
-    DegreeReq *degReq = (DegreeReq *)malloc(sizeof(DegreeReq));
-    degReq->list = (CourseLinkedList **)malloc(10 * sizeof(CourseLinkedList *));
-    degReq->size = 0;
-    for (int i = 0; i < 10; i++)
-    {
-        degReq->list[i] = createCourseLinkedList();
-    }
-    return degReq;
+    DegreeReq *bst = (DegreeReq *)malloc(sizeof(DegreeReq));
+    return bst;
 }
 
 /*
-Function : resizeDegreeReq
-------------------------------------------
-Increase the size of a degree req
+Function: createCourseBSTNode
+-------------------------------------------------
+Create a new node with a given course pointer
 
-arr: pointer to a DegreeReq
+param:
+c: pointer to the course in the new node
+*/
+DegreeReqNode *createDegreeReqNode(CourseLinkedList *c)
+{
+    DegreeReqNode *cn = (DegreeReqNode *)malloc(sizeof(DegreeReqNode));
+    cn->course = c;
+    cn->left = NULL;
+    cn->right = NULL;
+    return cn;
+}
+
+/*
+Function: insertDegreeReqNode
+-------------------------------------------------
+Insert a new course into the course binary search recursively
+
+return: pointer to the node inserted to the bst
+
+param:
+root: current root of the bst
+newCoursse: pointer to the new course being inserted
 
 */
-void resizeDegreeReq(DegreeReq *arr)
+DegreeReqNode *insertDegreeReqNode(DegreeReqNode *root, CourseLinkedList *newCourse)
 {
-    int oldSize = arr->size;
-    arr->list = (CourseLinkedList **)realloc(arr->list, arr->size * 2 * sizeof(CourseLinkedList *));
-    for (int i = oldSize; i < arr->size; i++)
+    /* If the tree is empty, return a new node */
+    if (root == NULL)
     {
-        arr->list[i] = (CourseLinkedList *)malloc(sizeof(CourseLinkedList));
+        DegreeReqNode *newNode = createDegreeReqNode(newCourse);
+        return newNode;
+    }
+    //Catching if newCourse is null or newCourse is empty
+    if (newCourse == NULL || newCourse->first == NULL)
+    {
+        printf("Attempted to insert a null course linked list in degreq\n");
+        return NULL;
+    }
+    //Take out the first code in the linkedlist and compare by that
+    char *newfirst = newCourse->first->data;
+    char *currfirst = root->course->first->data;
+    int cmp = strcmp(newfirst, currfirst);
+    /* Otherwise, recur down the tree */
+    if (cmp < 0)
+        root->left = insertDegreeReqNode(root->left, newCourse);
+    else if (cmp > 0)
+        root->right = insertDegreeReqNode(root->right, newCourse);
+
+    /* return the (unchanged) node pointer */
+    return root;
+}
+
+/*
+Function: insertDegreeReq
+-------------------------------------------------
+Insert a new course into the course binary search tree. This function is 
+essentially a wrapper function for insertCourseBSTNode
+
+return: pointer to the node inserted to the bst
+
+param:
+bst: pointer to the bst
+newCoursse: pointer to the new course being inserted
+
+*/
+DegreeReqNode *insertDegreeReq(DegreeReq *bst, CourseLinkedList *newCourse)
+{
+    if (bst == NULL)
+    {
+        printf("BST is NULL (insertion)\n");
+        return NULL;
+    }
+    bst->root = insertDegreeReqNode(bst->root, newCourse);
+}
+
+/*
+Function: printDegreeReqNode
+-------------------------------------------------
+Print the bst recursively using pointer to the root.
+Inorder
+
+Pit fall: skipping empty nodes
+
+param:
+root: pointer to the root
+
+*/
+void printDegreeReqNode(DegreeReqNode *root)
+{
+    if (root != NULL)
+    {
+        printDegreeReqNode(root->left);
+        if (root->course->first != NULL)
+        {
+            printCourseLinkedList(root->course);
+        }
+        printDegreeReqNode(root->right);
     }
 }
-/*
-Function : insertDegreeReq
-------------------------------------------
-Add a new linked list to the Degree Req
 
-arr: pointer to the list
-courses: pointer the the requirement list
+/*
+Function: printDegreeReq
+-------------------------------------------------
+Print the bst. This function is essentially a wrapper function for 
+printBSTNode
+
+param:
+bst: pointer to the bst
 
 */
-void insertDegreeReq(DegreeReq *arr, CourseLinkedList *courses)
+void printDegreeReq(DegreeReq *bst)
 {
-    if (arr == NULL)
+    if (bst == NULL)
     {
-        printf("Degree ArrayList is NULL\n");
-        return;
+        printf("This Degree Req bst doesn't exist.\n");
     }
-    if (arr->list == NULL || courses == NULL)
+    else if (bst->root == NULL)
     {
-        printf("CLL in DegReq is NULL\n");
-        return;
+        printf("There is no course in this degree req bst.\n");
     }
-    if ((arr->size) % 10 == 0 && arr->size != 0)
-        resizeDegreeReq(arr);
-    if (arr->size == 0)
+    else if (bst != NULL)
     {
-        arr->list[0] = courses;
-        arr->size++;
-        return;
+        printDegreeReqNode(bst->root);
+    }
+}
+
+/*
+Function: searchDegreeReq
+-------------------------------------------------
+Search for a node in the bst by code of course. Wrapper
+function for searchCourseBSTNode
+
+param:
+bst: pointer to the bst
+courseCode: code of the wanted course
+
+*/
+DegreeReqNode *searchDegreeReq(DegreeReq *bst, char *courseCode)
+{
+    if (bst == NULL)
+    {
+        printf("NULL CourseBST\n");
+        return NULL;
+    }
+    else if (bst->root == NULL)
+    {
+        printf("Empty Course BST\n");
+        return NULL;
     }
     else
     {
-        arr->list[arr->size] = courses;
-        arr->size++;
-        return;
+        return searchDegreeReqNode(bst->root, courseCode);
     }
 }
 
 /*
-Function : printDegreeReq
-------------------------------------------
-Print the DegreeReq
+Function: searchDegreeReqNode
+-------------------------------------------------
+Search for a node in the bst by code of course.
+Go through the bst nodes in a recursive fashion.
 
-arr: pointer to the DegreeReq
+param:
+root: pointer to the root node
+courseCode: code of the wanted course
 
 */
-void printDegreeReq(DegreeReq *arr)
+DegreeReqNode *searchDegreeReqNode(DegreeReqNode *root, char *courseCode)
 {
-    if (arr == NULL)
+    if (root != NULL)
     {
-        printf("DR is Null");
-        return;
-    }
-    if (arr->list == NULL && arr->size == 0)
-    {
-        printf("Something is NULL\n");
-        return;
-    }
-    for (int i = 0; i < arr->size; i++)
-    {
-        printCourseLinkedList(arr->list[i]);
+        searchDegreeReqNode(root->left, courseCode);
+        CourseLinkedList *cll = searchCourseLinkedList(root->course, courseCode);
+        if (cll != NULL)
+            return root;
+        searchDegreeReqNode(root->right, courseCode);
     }
 }
 
-//Search and return the requirement by title of the course
-//if found return the index of the requirement(CLL) if not return -1
-int searchCourseDegreeReq(DegreeReq *degReq, char *course)
+/*
+Function: removeDegreeReqNode
+-------------------------------------------------
+Search for a node in the bst by code of course and remove it.
+Go through the bst nodes in a recursive fashion.
+Possible pitfall: only deleltes the prereq not the node at that prereq
+=> There can be empty nodes
+
+param:
+root: pointer to the root node
+courseCode: code of the wanted course
+
+*/
+DegreeReqNode *removeDegreeReqNode(DegreeReqNode *root, char *courseCode)
 {
-    if (degReq->size == 0)
+    DegreeReqNode *dn = searchDegreeReqNode(root, courseCode);
+    if (dn != NULL)
     {
-        return -1;
+        dn->course = removeCourseLinkedList(dn->course, courseCode);
     }
-    for (int i = 0; i < degReq->size; i++)
+    return dn;
+}
+
+/*
+Function: removeDegreeReq
+-------------------------------------------------
+Wrapper function for the removeCourseBSTNode function
+*/
+DegreeReqNode *removeDegreeReq(DegreeReq *bst, char *courseCode)
+{
+    if (bst == NULL)
     {
-        int search = searchCourseLinkedList(degReq->list[i], course);
-        if (search == -1)
-        {
-            printf("Something in DegreeReq's CourseLinkedList is null\n");
-            return -1;
-        }
-        else if (search == 1)
-            return i;
+        printf("NULL CourseBST\n");
+        return NULL;
     }
-    return -1;
+    else if (bst->root == NULL)
+    {
+        printf("Empty Course BST\n");
+        return NULL;
+    }
+    else
+    {
+        removeDegreeReqNode(bst->root, courseCode);
+        return bst->root;
+    }
 }

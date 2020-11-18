@@ -7,7 +7,7 @@
 #include "department.h"
 #include "degree.h"
 #include "degreeArrayList.h"
-#include "courseArrayList.h"
+#include "courseBST.h"
 #include "deptArrayList.h"
 
 #define MAX 1000
@@ -124,7 +124,7 @@ void readDeg(FILE *input, char *name)
         else
         {
             CourseLinkedList *cll2 = createCourseLinkedList();
-            insertCourseLinkedList(cll2, token);
+            insertCourseLinkedList(cll2, preReqs);
             insertDegreeReq(degReq, cll2);
         }
     }
@@ -186,14 +186,17 @@ void commandC(char *param)
     for (int i = 0; i < deptArray->size; i++)
     {
         Department *dep = deptArray->list[i];
-        Course *c = getCourseArrayList(dep->courses, param);
+        if (dep == NULL)
+            return;
+        CourseBSTNode *cn = searchCourseBST(dep->courses, param);
+        if (cn == NULL)
+            return;
+        Course *c = cn->course;
         if (c != NULL)
         {
             printCourse(c);
-            return;
         }
     }
-    return;
 }
 
 /*

@@ -1,4 +1,8 @@
 DEPARTMENT
 Psychology
-Intro to Psych
 Psych 110
+Intro to Psych
+
+Psych 112
+Advanced Psych
+OR Psych 100, Psych 110

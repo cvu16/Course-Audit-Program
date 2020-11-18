@@ -11,7 +11,7 @@ typedef struct Degree
 } Degree;
 
 extern Degree *createDeg(char *name);
-extern void addCourseDeg(Degree *deg, char *newCourse, char * or);
+extern void setDegReq(Degree *deg, DegreeReq *dr);
 extern void setDeptDeg(Degree *deg, char *dept);
 extern void printDeg(Degree *deg);
 

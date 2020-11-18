@@ -14,6 +14,7 @@ return: pointer to a new binary search tree
 CourseBST *createCourseBST()
 {
     CourseBST *bst = (CourseBST *)malloc(sizeof(CourseBST));
+    bst->root = NULL;
     return bst;
 }
 

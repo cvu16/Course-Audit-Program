@@ -13,6 +13,8 @@ Include has to be re-written for each test (I mean isn't that the point)
 #include "course.h"
 #include "courseBST.h"
 #include "department.h"
+#include "degreeReq.h"
+#include "degree.h"
 
 /* CourseBST Unit Test
 void main()
@@ -75,6 +77,8 @@ void main()
 }
 */
 
+/*
+//Department unitTest
 void main()
 {
     Course *c1 = createCourse("Psych 320", "Advance to Psych");
@@ -99,4 +103,31 @@ void main()
     removePrereqDept(dept, "Psych 333");
     printDept(dept);
     //printDept(dept);
+}
+*/
+
+//DegreeReq unit tests
+void main(void)
+{
+    CourseLinkedList *cll1 = createCourseLinkedList();
+    Degree *d = createDeg("Psychology");
+    DegreeReq *dr = createDegreeReq();
+    insertCourseLinkedList(cll1, "Psych 110");
+    insertCourseLinkedList(cll1, "Psych 112");
+    insertCourseLinkedList(cll1, "Psych 113");
+    CourseLinkedList *cll2 = createCourseLinkedList();
+    insertCourseLinkedList(cll2, "Psych 210");
+    insertCourseLinkedList(cll2, "Psych 212");
+    insertCourseLinkedList(cll2, "Psych 213");
+    CourseLinkedList *cll3 = createCourseLinkedList();
+    insertCourseLinkedList(cll3, "Psych 555");
+    insertDegreeReq(dr, cll1);
+    insertDegreeReq(dr, cll2);
+    insertDegreeReq(dr, cll3);
+    //DegreeReqNode *dn = searchDegreeReq(dr, "Psych 666");
+    removeDegreeReq(dr, "Psych 555");
+    removeDegreeReq(dr, "Psych 212");
+    removeDegreeReq(dr, "Psych 210");
+    setDegReq(d, dr);
+    printDeg(d);
 }
