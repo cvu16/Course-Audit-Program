@@ -15,6 +15,7 @@ return: pointer to a new binary search tree
 DegreeReq *createDegreeReq()
 {
     DegreeReq *bst = (DegreeReq *)malloc(sizeof(DegreeReq));
+    bst->root = NULL;
     return bst;
 }
 

@@ -42,5 +42,5 @@ void checkPreReq(Department *dept, char *code)
         printf("Department is Null or Empty");
         return;
     }
-    checkPrereqCourseBST(dept->courses, code);
+    printCourseLinkedList(checkPrereqCourseBST(dept->courses, code));
 }

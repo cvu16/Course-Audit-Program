@@ -15,6 +15,7 @@ Include has to be re-written for each test (I mean isn't that the point)
 #include "department.h"
 #include "degreeReq.h"
 #include "degree.h"
+#include "degreeArrayList.h"
 
 /* CourseBST Unit Test
 void main()
@@ -77,8 +78,8 @@ void main()
 }
 */
 
-/*
 //Department unitTest
+/*
 void main()
 {
     Course *c1 = createCourse("Psych 320", "Advance to Psych");
@@ -101,11 +102,13 @@ void main()
     addCourseDept(dept, c3);
     //removeCourseDept(dept, "Psych 555");
     removePrereqDept(dept, "Psych 333");
-    printDept(dept);
+    //printDept(dept);
+    checkPreReq(dept, "Psych 222");
     //printDept(dept);
 }
 */
 
+/*
 //DegreeReq unit tests
 void main(void)
 {
@@ -130,4 +133,75 @@ void main(void)
     removeDegreeReq(dr, "Psych 210");
     setDegReq(d, dr);
     printDeg(d);
+}
+*/
+
+void main()
+{
+    Course *c1 = createCourse("Psych 320", "Advance to Psych");
+    addCourseReq(c1, "Psych 110");
+    addCourseReq(c1, "Psych 220");
+    Course *c2 = createCourse("Psych 444", "Advance B to Psych");
+    addCourseReq(c2, "Psych 333");
+    addCourseReq(c2, "Psych 222");
+    Course *c3 = createCourse("Psych 555", "Advance C to Psych");
+    addCourseReq(c3, "Psych 444");
+    addCourseReq(c3, "Psych 333");
+    CourseBST *cbst = createCourseBST();
+    insertCourseBST(cbst, c1);
+    insertCourseBST(cbst, c2);
+    insertCourseBST(cbst, c3);
+    //printBST(cbst);
+    Department *dept = createDept("Psychology");
+    addCourseDept(dept, c1);
+    addCourseDept(dept, c2);
+    addCourseDept(dept, c3);
+    //removeCourseDept(dept, "Psych 555");
+    //removePrereqDept(dept, "Psych 333");
+    //printDept(dept);
+    //checkPreReq(dept, "Psych 222");
+    //printDept(dept);
+    Degree *deg1 = createDeg("BS Psychology");
+    DegreeReq *dr1 = createDegreeReq();
+    Degree *deg2 = createDeg("BA Psychology");
+    DegreeReq *dr2 = createDegreeReq();
+    setDegReq(deg1, dr1);
+    setDegReq(deg2, dr2);
+    CourseLinkedList *cll1 = createCourseLinkedList();
+    CourseLinkedList *cll2 = createCourseLinkedList();
+    insertCourseLinkedList(cll1, "Psych 444");
+    insertCourseLinkedList(cll1, "Psych 443");
+    insertCourseLinkedList(cll2, "Psych 555");
+    insertCourseLinkedList(cll2, "Psych 553");
+    insertDegreeReq(dr1, cll1);
+    //printDegreeReq(dr1);
+    insertDegreeReq(dr2, cll2);
+    //printDegreeReq(dr2);
+    //printDeg(deg1);
+    //printDeg(deg2);
+    DegreeArrayList *dal = createDegreeArrayList();
+    insertDegreeArrayList(dal, deg1);
+    insertDegreeArrayList(dal, deg2);
+    CourseLinkedList *clls = checkPrereqCourseBST(dept->courses, "Psych 333");
+    printCourseLinkedList(clls);
+    CourseNode *cn = clls->first;
+    DegreeArrayList *temp = createDegreeArrayList();
+    while (cn != NULL)
+    {
+        char *code = cn->data;
+        for (int i = 0; i < dal->size; i++)
+        {
+            Degree *deg = dal->list[i];
+            if (deg == NULL)
+                return;
+            DegreeReqNode *res = searchDegreeReq(dal->list[i]->req, code);
+            if (res != NULL)
+            {
+                insertDegreeArrayList(temp, deg);
+                continue;
+            }
+        }
+        cn = cn->next;
+    }
+    printDegreeArrayList(temp);
 }

@@ -77,6 +77,7 @@ void readDept(FILE *input, char *name)
                 token = strtok(NULL, ",");
             }
         }
+        course->pre = cll;
         addCourseDept(dept, course);
     }
     insertDeptArrayList(deptArray, dept);
@@ -124,6 +125,7 @@ void readDeg(FILE *input, char *name)
         else
         {
             CourseLinkedList *cll2 = createCourseLinkedList();
+            preReqs = cleanInput(preReqs);
             insertCourseLinkedList(cll2, preReqs);
             insertDegreeReq(degReq, cll2);
         }
@@ -149,7 +151,6 @@ void fileInput(char *fileName)
     char *line = (char *)malloc(MAX * sizeof(char));
     fgets(line, MAX, input);
     line = cleanInput(line);
-    //13 because strcmp outputs 13 for no reason when they are equal plus newline
     if (strcmp(line, "DEPARTMENT") == 0)
     {
         char *name = (char *)malloc(MAX * sizeof(char));
@@ -200,7 +201,7 @@ void commandC(char *param)
 }
 
 /*
-Function : commandC
+Function : commandD
 ------------------------------------------
 Search the degree list for the degree
 
@@ -225,10 +226,68 @@ param: code name of the course
 */
 void commandS(char *param)
 {
+    CourseLinkedList *clls;
     for (int i = 0; i < deptArray->size; i++)
     {
-        checkPreReq(deptArray->list[i], param);
+        Department *dep = deptArray->list[i];
+        if (dep == NULL)
+            break;
+        clls = checkPrereqCourseBST(dep->courses, param);
+        if (clls != NULL)
+            break;
     }
+    printf("Take next: ");
+    printCourseLinkedList(clls);
+    //Check for the degrees that contain these courses
+    /*
+    The while loop traverse through the cll that holds the
+    classes that have param as a prereq
+
+    Temp is a degree array that holds the result of the search
+    */
+    CourseNode *cn = clls->first;
+    DegreeArrayList *temp = createDegreeArrayList();
+    while (cn != NULL)
+    {
+        /*
+        For each of the courses that have param as prereq,
+        search that course in each of the degree of the 
+        degreeArray
+        */
+        char *code = cn->data;
+        for (int i = 0; i < degreeArray->size; i++)
+        {
+            Degree *deg = degreeArray->list[i];
+            if (deg == NULL)
+                return;
+            DegreeReqNode *res = searchDegreeReq(degreeArray->list[i]->req, code);
+            /*
+            If found, skip to the next degree in the array
+            */
+            if (res != NULL)
+            {
+                /*
+                Check if this degree is already in temp by searching for it
+                doesn't insert when it is already in temp
+                */
+                if (getDegreeArrayList(temp, deg->name) == NULL)
+                {
+                    insertDegreeArrayList(temp, deg);
+                    continue;
+                }
+                else
+                    continue;
+            }
+        }
+        cn = cn->next;
+    }
+    //Loop to just print the names
+    printf("Degrees:");
+    for (int i = 0; i < temp->size; i++)
+    {
+        printf("%s, ", temp->list[i]->name);
+    }
+    printf("\n");
 }
 
 /*
@@ -276,6 +335,7 @@ int main(int argc, char **argv)
     for (int i = 1; i < argc; i++)
     {
         fileInput(argv[i]);
+        printDeptArrayList(deptArray);
     }
     while (1)
     {

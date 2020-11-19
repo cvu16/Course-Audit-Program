@@ -89,6 +89,11 @@ CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar)
 {
     if (list->first == NULL)
     {
+        printf("Searching NULL LinkedList\n");
+        return NULL;
+    }
+    if (list->first == NULL)
+    {
         printf("Searching empty LinkedList\n");
         return NULL;
     }
@@ -100,6 +105,7 @@ CourseLinkedList *searchCourseLinkedList(CourseLinkedList *list, char *tar)
         else
             curr = curr->next;
     }
+    printf("Search CLL not found\n");
     return NULL;
 }
 
