@@ -116,7 +116,6 @@ void readDeg(FILE *input, char *name)
             while (token != NULL)
             {
                 token = cleanInput(token);
-                printf("%s\n", token);
                 insertCourseLinkedList(cll, token);
                 token = strtok(NULL, ",");
             }
@@ -226,15 +225,32 @@ param: code name of the course
 */
 void commandS(char *param)
 {
-    CourseLinkedList *clls;
+    //clls is the final list of courses that have this prereq
+    //currcll is the temporary list in the department being searched
+    CourseLinkedList *clls = createCourseLinkedList();
+    CourseLinkedList *currcll;
     for (int i = 0; i < deptArray->size; i++)
     {
+        //Going through each department in the department array
         Department *dep = deptArray->list[i];
         if (dep == NULL)
             break;
-        clls = checkPrereqCourseBST(dep->courses, param);
-        if (clls != NULL)
-            break;
+        //Search the department for the courses with this prereq
+        //and put it into currcll
+        currcll = checkPrereqCourseBST(dep->courses, param);
+        //Add each element of currcll to clls
+        if (currcll != NULL)
+        {
+            CourseNode *currnode = currcll->first;
+            while (currnode != NULL)
+            {
+                if (currnode->data != NULL)
+                    insertCourseLinkedList(clls, currnode->data);
+                currnode = currnode->next;
+            }
+            //Continue to the next department in the department array
+            continue;
+        }
     }
     printf("Take next: ");
     printCourseLinkedList(clls);
@@ -335,8 +351,10 @@ int main(int argc, char **argv)
     for (int i = 1; i < argc; i++)
     {
         fileInput(argv[i]);
-        printDeptArrayList(deptArray);
     }
+    Department *dep = getDeptArrayList(deptArray, "Biology");
+    commandS("Psych 110");
+    return 0;
     while (1)
     {
         printf("Type in a command\n");

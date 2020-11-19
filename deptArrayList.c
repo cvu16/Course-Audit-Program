@@ -72,7 +72,7 @@ Department *getDeptArrayList(DeptArrayList *degArr, char *name)
     Department **array = degArr->list;
     for (int i = 0; i < degArr->size; i++)
     {
-        if (strcmp(array[i]->name, name) == 3)
+        if (strcmp(array[i]->name, name) == 0)
         {
             return array[i];
         }

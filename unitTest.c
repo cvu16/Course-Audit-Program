@@ -16,6 +16,7 @@ Include has to be re-written for each test (I mean isn't that the point)
 #include "degreeReq.h"
 #include "degree.h"
 #include "degreeArrayList.h"
+#include "deptArrayList.h"
 
 /* CourseBST Unit Test
 void main()
