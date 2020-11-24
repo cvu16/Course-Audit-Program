@@ -29,6 +29,7 @@ char *cleanInput(char *input)
 {
     if (input[0] == ' ')
     {
+        input[0] = NULL;
         input++;
     }
     input[strcspn(input, "\r\n")] = '\0';
@@ -117,6 +118,9 @@ void readStudent(FILE *input, char *name)
         addCompletedCourseStudent(student, curr);
     }
     free(name);
+    free(studentName);
+    free(degree);
+    free(preReq);
 }
 
 /*
@@ -188,34 +192,39 @@ void fileInput(char *fileName)
     line = cleanInput(line);
     if (strcmp(line, "DEPARTMENT") == 0)
     {
-        char *name = (char *)malloc(MAX * sizeof(char));
+        char *name;
+        name = (char *)malloc(MAX * sizeof(char));
         fgets(name, MAX, input);
         readDept(input, name);
         fclose(input);
-        free(input);
+        free(line);
         return;
     }
     else if (strcmp(line, "DEGREE") == 0)
     {
-        char *name1 = (char *)malloc(MAX * sizeof(char));
+        char *name1;
+        name1 = (char *)malloc(MAX * sizeof(char));
         fgets(name1, MAX, input);
         readDeg(input, name1);
         fclose(input);
-        free(input);
+        free(line);
         return;
     }
     else if (strcmp(line, "STUDENT") == 0)
     {
-        char *name2 = (char *)malloc(MAX * sizeof(char));
+        char *name2;
+        name2 = (char *)malloc(MAX * sizeof(char));
         fgets(name2, MAX, input);
         readStudent(input, name2);
         fclose(input);
-        free(input);
+        free(line);
         return;
     }
     else
     {
         printf("Invalid file opener");
+        fclose(input);
+        free(line);
         return;
     }
 }
@@ -237,7 +246,7 @@ void commandC(char *param)
             return;
         CourseBSTNode *cn = searchCourseBST(dep->courses, param);
         if (cn == NULL)
-            return;
+            continue;
         Course *c = cn->course;
         if (c != NULL)
         {
@@ -418,11 +427,58 @@ void commandM(char *param)
 }
 
 /*
-Function : commandN
+Function : commandMwithReturn
 ------------------------------------------
+Get input from the command line (stdin)
+to execute waned functions
+
+userInput: the input string recorded from stdin
 
 */
-void commandN(char *param)
+DegreeArrayList *commandMwithReturn(char *param)
+{
+    StudentBSTNode *student = searchStudentBST(studentbst, param);
+    DegreeArrayList *copyDegArr = createDegreeArrayList();
+    CourseNode *currDeg = student->degs->first;
+    if (currDeg == NULL)
+    {
+        printf("Student does not declare a degree\n");
+        return;
+    }
+    while (currDeg != NULL)
+    {
+        Degree *degree = (Degree *)malloc(sizeof(Degree));
+        Degree *searchedDeg = getDegreeArrayList(degreeArray, currDeg->data);
+        if (searchedDeg == NULL)
+        {
+            printf("Declared Degree Not Found\n");
+            return;
+        }
+        memcpy(degree, searchedDeg, sizeof(Degree));
+        DegreeReq *copyReq = degree->req;
+        if (student->completed == NULL)
+        {
+            printf("Student does not have class list\n");
+            return;
+        }
+        CourseNode *curr = student->completed->first;
+        if (curr == NULL)
+        {
+            printf("Student has not taken any class\n");
+            return;
+        }
+        while (curr != NULL)
+        {
+            removeDegreeReq(copyReq, curr->data);
+            curr = curr->next;
+        }
+        insertDegreeArrayList(copyDegArr, degree);
+        currDeg = currDeg->next;
+    }
+    return copyDegArr;
+}
+
+CourseLinkedList *commandSwithReturn(char *param)
 {
     //clls is the final list of courses that have this prereq
     //currcll is the temporary list in the department being searched
@@ -455,6 +511,46 @@ void commandN(char *param)
             continue;
         }
     }
+    return clls;
+}
+
+/*
+Function : commandN
+------------------------------------------
+
+*/
+void commandN(char *param)
+{
+    //Get the student from the bst
+    StudentBSTNode *student = searchStudentBST(studentbst, param);
+    if (student == NULL)
+    {
+        printf("Student Not Found\n");
+        return;
+    }
+    //classesLeft stores the classes the student still have to take for their degree through commandM
+    DegreeArrayList *classesLeft = commandMwithReturn(param);
+    if (classesLeft->size == 0 || classesLeft->list == NULL)
+    {
+        printf("No Classes left\n");
+        return;
+    }
+
+    //classesCanTake runs commandS through all of the students completed classes
+    DegreeReq *classesCanTake = createDegreeReq();
+    CourseLinkedList *completed = student->completed;
+    if (completed == NULL)
+        return;
+    CourseNode *curr = completed->first;
+    if (curr == NULL)
+        return;
+    while (curr != NULL)
+    {
+        CourseLinkedList *source = commandSwithReturn(curr->data);
+        CourseLinkedList *des = (CourseLinkedList *)malloc(sizeof(CourseLinkedList));
+        memcpy(des, source, sizeof(CourseLinkedList));
+        insertDegreeReq(des, classesCanTake);
+    }
 }
 
 /*
@@ -469,7 +565,12 @@ userInput: the input string recorded from stdin
 void commandLine(char *userInput)
 {
     if (strcmp(strtok(userInput, "\n"), "x") == 0)
+    {
+        free(degreeArray);
+        free(deptArray);
+        free(studentbst);
         exit(0);
+    }
     char *command = strtok(userInput, " "); //extract the command
     if (strcmp(command, "c") == 0)
     {

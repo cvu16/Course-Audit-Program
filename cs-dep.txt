@@ -8,3 +8,13 @@ Gaming
 
 CS 150
 Data Structures
+OR CS 104, CS 105
+CS 202
+Analysis of Algo
+MATH 186, CS 150
+CS 203
+Computer Org
+CS 150
+CS 205
+Software Engineering
+CS 150

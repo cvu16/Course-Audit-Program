@@ -29,6 +29,8 @@ list: the pointer to the course linked list to be printed
 */
 void printCourseLinkedList(CourseLinkedList *list)
 {
+    if (list == NULL)
+        return;
     if (list->first == NULL)
     {
         printf("(There is no prerequisite)\n");
@@ -61,6 +63,8 @@ newData: the code name of the new course
 */
 void insertCourseLinkedList(CourseLinkedList *list, char *newData)
 {
+    if (list == NULL)
+        return;
     if (list->first == NULL)
     {
         CourseNode *cn = createNode(newData, NULL, NULL);

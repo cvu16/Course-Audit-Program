@@ -1,0 +1,14 @@
+DEPARTMENT
+Mathematics
+MATH 101
+Basic Algebra
+
+MATH 161
+Calculus 1
+
+MATH 162
+Calculus 2
+MATH 161
+MATH 186
+Discrete Mathematics
+OR MATH 161, MATH 162
