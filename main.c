@@ -9,11 +9,13 @@
 #include "degreeArrayList.h"
 #include "courseBST.h"
 #include "deptArrayList.h"
+#include "studentBST.h"
 
-#define MAX 1000
+#define MAX 256
 
 DegreeArrayList *degreeArray;
 DeptArrayList *deptArray;
+StudentBST *studentbst;
 
 /*
 Function : cleanInput
@@ -47,23 +49,22 @@ void readDept(FILE *input, char *name)
     name = cleanInput(name);
     Department *dept = createDept(name);
     //printf("Department name is: %s\n", dept->name);
-    char *currLine = (char *)malloc(MAX * sizeof(char));
     while (!feof(input))
     {
         char *code = (char *)malloc(MAX * sizeof(char));
-        char *name = (char *)malloc(MAX * sizeof(char));
+        char *cname = (char *)malloc(MAX * sizeof(char));
         char *preReqs = (char *)malloc(MAX * sizeof(char));
         char *token = (char *)malloc(MAX * sizeof(char));
 
         fgets(code, MAX, input);
         code = strtok(code, "\n");
         code = cleanInput(code);
-        fgets(name, MAX, input);
-        name = strtok(name, "\n");
-        name = cleanInput(name);
+        fgets(cname, MAX, input);
+        cname = strtok(name, "\n");
+        cname = cleanInput(name);
         fgets(preReqs, MAX, input);
 
-        Course *course = createCourse(code, name);
+        Course *course = createCourse(code, cname);
         CourseLinkedList *cll = course->pre;
 
         if (strncmp(preReqs, "OR", 2) == 0)
@@ -81,6 +82,41 @@ void readDept(FILE *input, char *name)
         addCourseDept(dept, course);
     }
     insertDeptArrayList(deptArray, dept);
+    free(name);
+}
+
+/*
+Function : readStudent
+------------------------------------------
+Read in the name of the student and store the information
+
+input: pointer to stdin
+name: name of the department
+
+*/
+void readStudent(FILE *input, char *name)
+{
+    name = cleanInput(name);
+    char *studentName = (char *)malloc(MAX * sizeof(char));
+    strcpy(studentName, name);
+    insertStudentBST(studentbst, studentName);
+    StudentBSTNode *student = searchStudentBST(studentbst, studentName);
+
+    char *degree = (char *)malloc(MAX * sizeof(char));
+    fgets(degree, MAX, input);
+    degree = cleanInput(degree);
+    addDegreeStudent(student, degree);
+
+    char *preReq = (char *)malloc(MAX * sizeof(char));
+    while (!feof(input))
+    {
+        fgets(preReq, MAX, input);
+        preReq = cleanInput(preReq);
+        char *curr = (char *)malloc(MAX * sizeof(char));
+        strcpy(curr, preReq);
+        addCompletedCourseStudent(student, curr);
+    }
+    free(name);
 }
 
 /*
@@ -97,7 +133,6 @@ void readDeg(FILE *input, char *name)
     name = strtok(name, "\n");
     name = cleanInput(name);
     Degree *deg = createDeg(name);
-    char *currLine = (char *)malloc(MAX * sizeof(char));
     while (!feof(input))
     {
         char *preReqs = (char *)malloc(MAX * sizeof(char));
@@ -130,6 +165,7 @@ void readDeg(FILE *input, char *name)
         }
     }
     insertDegreeArrayList(degreeArray, deg);
+    free(name);
 }
 
 /*
@@ -156,6 +192,7 @@ void fileInput(char *fileName)
         fgets(name, MAX, input);
         readDept(input, name);
         fclose(input);
+        free(input);
         return;
     }
     else if (strcmp(line, "DEGREE") == 0)
@@ -164,6 +201,16 @@ void fileInput(char *fileName)
         fgets(name1, MAX, input);
         readDeg(input, name1);
         fclose(input);
+        free(input);
+        return;
+    }
+    else if (strcmp(line, "STUDENT") == 0)
+    {
+        char *name2 = (char *)malloc(MAX * sizeof(char));
+        fgets(name2, MAX, input);
+        readStudent(input, name2);
+        fclose(input);
+        free(input);
         return;
     }
     else
@@ -218,7 +265,7 @@ void commandD(char *param)
 Function : commandS
 ------------------------------------------
 Search the lists of Courses to see what are the courses
-that have the code name of the course for prerequisit
+that have the code name of the course for prerequisite
 
 param: code name of the course
 
@@ -245,8 +292,12 @@ void commandS(char *param)
             while (currnode != NULL)
             {
                 if (currnode->data != NULL)
-                    insertCourseLinkedList(clls, currnode->data);
-                currnode = currnode->next;
+                {
+                    char *newData = (char *)malloc(MAX * sizeof(char));
+                    strcpy(newData, currnode->data);
+                    insertCourseLinkedList(clls, newData);
+                    currnode = currnode->next;
+                }
             }
             //Continue to the next department in the department array
             continue;
@@ -304,6 +355,106 @@ void commandS(char *param)
         printf("%s, ", temp->list[i]->name);
     }
     printf("\n");
+    free(clls);
+    free(temp);
+}
+
+/*
+Function : commandP()
+*/
+void commandP();
+
+/*
+Function : commandM
+------------------------------------------
+Get input from the command line (stdin)
+to execute waned functions
+
+userInput: the input string recorded from stdin
+
+*/
+void commandM(char *param)
+{
+    StudentBSTNode *student = searchStudentBST(studentbst, param);
+    DegreeArrayList *copyDegArr = createDegreeArrayList();
+    CourseNode *currDeg = student->degs->first;
+    if (currDeg == NULL)
+    {
+        printf("Student does not declare a degree\n");
+        return;
+    }
+    while (currDeg != NULL)
+    {
+        Degree *degree = (Degree *)malloc(sizeof(Degree));
+        Degree *searchedDeg = getDegreeArrayList(degreeArray, currDeg->data);
+        if (searchedDeg == NULL)
+        {
+            printf("Declared Degree Not Found\n");
+            return;
+        }
+        memcpy(degree, searchedDeg, sizeof(Degree));
+        DegreeReq *copyReq = degree->req;
+        if (student->completed == NULL)
+        {
+            printf("Student does not have class list\n");
+            return;
+        }
+        CourseNode *curr = student->completed->first;
+        if (curr == NULL)
+        {
+            printf("Student has not taken any class\n");
+            return;
+        }
+        while (curr != NULL)
+        {
+            removeDegreeReq(copyReq, curr->data);
+            curr = curr->next;
+        }
+        insertDegreeArrayList(copyDegArr, degree);
+        currDeg = currDeg->next;
+    }
+    printDegreeArrayList(copyDegArr);
+    free(copyDegArr);
+}
+
+/*
+Function : commandN
+------------------------------------------
+
+*/
+void commandN(char *param)
+{
+    //clls is the final list of courses that have this prereq
+    //currcll is the temporary list in the department being searched
+    CourseLinkedList *clls = createCourseLinkedList();
+    CourseLinkedList *currcll;
+    for (int i = 0; i < deptArray->size; i++)
+    {
+        //Going through each department in the department array
+        Department *dep = deptArray->list[i];
+        if (dep == NULL)
+            break;
+        //Search the department for the courses with this prereq
+        //and put it into currcll
+        currcll = checkPrereqCourseBST(dep->courses, param);
+        //Add each element of currcll to clls
+        if (currcll != NULL)
+        {
+            CourseNode *currnode = currcll->first;
+            while (currnode != NULL)
+            {
+                if (currnode->data != NULL)
+                {
+                    char *newData = (char *)malloc(MAX * sizeof(char));
+                    strcpy(newData, currnode->data);
+                    insertCourseLinkedList(clls, newData);
+                    currnode = currnode->next;
+                }
+            }
+            //Continue to the next department in the department array
+            continue;
+        }
+    }
 }
 
 /*
@@ -342,19 +493,22 @@ void commandLine(char *userInput)
         char *name = typeName + 2;
         printf("commandP");
     }
+    else if (strcmp(command, "m") == 0)
+    {
+        char *studentName = strtok(userInput + 2, "\n");
+        commandM(studentName);
+    }
 }
 
 int main(int argc, char **argv)
 {
     degreeArray = createDegreeArrayList();
     deptArray = createDeptArrayList();
+    studentbst = createStudentBST();
     for (int i = 1; i < argc; i++)
     {
         fileInput(argv[i]);
     }
-    Department *dep = getDeptArrayList(deptArray, "Biology");
-    commandS("Psych 110");
-    return 0;
     while (1)
     {
         printf("Type in a command\n");

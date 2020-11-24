@@ -17,6 +17,7 @@ Include has to be re-written for each test (I mean isn't that the point)
 #include "degree.h"
 #include "degreeArrayList.h"
 #include "deptArrayList.h"
+#include "studentBST.h"
 
 /* CourseBST Unit Test
 void main()
@@ -137,6 +138,8 @@ void main(void)
 }
 */
 
+/*
+//Test for dept and deg
 void main()
 {
     Course *c1 = createCourse("Psych 320", "Advance to Psych");
@@ -205,4 +208,50 @@ void main()
         cn = cn->next;
     }
     printDegreeArrayList(temp);
+}
+*/
+
+/*
+//Testing for studentBST
+void main(void)
+{
+    StudentBST *bst = createStudentBST();
+    insertStudentBST(bst, "Alex Morgan");
+    insertStudentBST(bst, "Bob Morgan");
+    insertStudentBST(bst, "Charles Morgan");
+    insertStudentBST(bst, "Devin Morgan");
+    StudentBSTNode *n1 = searchStudentBST(bst, "Alex Morgan");
+    StudentBSTNode *n2 = searchStudentBST(bst, "Bob Morgan");
+    StudentBSTNode *n3 = searchStudentBST(bst, "Charles Morgan");
+    StudentBSTNode *n4 = searchStudentBST(bst, "Devin Morgan");
+    addCompletedCourseStudent(n1, "CS 150");
+    addCompletedCourseStudent(n2, "CS 150");
+    addCompletedCourseStudent(n2, "CS 203");
+    addCompletedCourseStudent(n3, "CS 150");
+    addCompletedCourseStudent(n4, "CS 150");
+    addDegreeStudent(n1, "BS Computer Science");
+    addDegreeStudent(n2, "BS Computer Science");
+    addDegreeStudent(n3, "BS Computer Science");
+    addDegreeStudent(n4, "BS Computer Science");
+    printStudentBST(bst);
+    printStudentBST(bst);
+}
+*/
+
+//Command m testing
+void main(void)
+{
+    StudentBST *bst = createStudentBST();
+    insertStudentBST(bst, "Alex Morgan");
+    insertStudentBST(bst, "Bob Morgan");
+
+    StudentBSTNode *n1 = searchStudentBST(bst, "Alex Morgan");
+    StudentBSTNode *n2 = searchStudentBST(bst, "Bob Morgan");
+
+    addCompletedCourseStudent(n1, "CS 150");
+    addCompletedCourseStudent(n2, "CS 150");
+    addCompletedCourseStudent(n2, "CS 203");
+
+    addDegreeStudent(n1, "BS Computer Science");
+    addDegreeStudent(n2, "BS Computer Science");
 }

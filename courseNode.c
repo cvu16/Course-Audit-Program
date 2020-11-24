@@ -16,7 +16,8 @@ nx: the next node
 CourseNode *createNode(char *d, CourseNode *p, CourseNode *nx)
 {
     CourseNode *np = (CourseNode *)malloc(sizeof(CourseNode));
-    np->data = d;
+    np->data = (char *)malloc(1000 * sizeof(char));
+    strcpy(np->data, d);
     if (p != NULL)
         np->prev = p;
     else

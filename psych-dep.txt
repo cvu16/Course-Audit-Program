@@ -1,0 +1,14 @@
+DEPARTMENT
+Psychology
+Psych 110
+Intro to Psych
+
+Psych 202
+Advanced Psych
+OR Psych 110, Bio 110
+Psych 205
+Advanced Psych B
+OR Psych 202
+Psych 256
+Advanced Psych C
+Bio 244

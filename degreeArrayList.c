@@ -108,7 +108,7 @@ Degree *getDegreeArrayList(DegreeArrayList *degArr, char *name)
 {
     if (degArr->list == NULL || degArr->size == 0)
     {
-        printf("DAL is Null or Empty\n");
+        //printf("DAL is Null or Empty\n");
         return NULL;
     }
     Degree **array = degArr->list;
@@ -119,6 +119,6 @@ Degree *getDegreeArrayList(DegreeArrayList *degArr, char *name)
             return array[i];
         }
     }
-    printf("NOT FOUND\n");
+    //printf("NOT FOUND\n");
     return NULL;
 }

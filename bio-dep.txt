@@ -1,0 +1,14 @@
+DEPARTMENT
+Biology
+Bio 110
+Intro to Bio
+
+Bio 201
+Advanced Bio
+OR Bio 110, Psych 110
+Bio 213
+Advanced Bio B
+Bio 201
+Bio 244
+Advanced Bio C
+OR Bio 213, Psych 205

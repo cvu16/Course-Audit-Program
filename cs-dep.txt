@@ -1,0 +1,10 @@
+DEPARTMENT
+Computer Science
+CS 105
+Digital Media
+
+CS 104
+Gaming
+
+CS 150
+Data Structures

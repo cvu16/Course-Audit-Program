@@ -17,7 +17,8 @@ return: pointer to the newly created Degree
 Degree *createDeg(char *name)
 {
     Degree *deg = (Degree *)malloc(sizeof(Degree));
-    deg->name = name;
+    deg->name = (char *)malloc(1000 * sizeof(char));
+    strcpy(deg->name, name);
     deg->dept = NULL;
     deg->req = createDegreeReq();
 }

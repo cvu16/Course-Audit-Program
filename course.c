@@ -18,8 +18,10 @@ return: pointer to a newly allocated course
 Course *createCourse(char *code, char *name)
 {
     Course *c = (Course *)malloc(sizeof(Course));
-    c->code = code;
-    c->name = name;
+    c->code = (char *)malloc(1000 * sizeof(char));
+    strcpy(c->code, code);
+    c->name = (char *)malloc(1000 * sizeof(char));
+    strcpy(c->name, name);
     c->pre = (CourseLinkedList *)malloc(sizeof(CourseLinkedList));
     return c;
 }

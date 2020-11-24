@@ -10,7 +10,8 @@
 Department *createDept(char *name)
 {
     Department *dept = (Department *)malloc(sizeof(Department));
-    dept->name = name;
+    dept->name = (char *)malloc(1000 * sizeof(char));
+    dept->name = strcpy(dept->name, name);
     dept->courses = createCourseBST();
 }
 

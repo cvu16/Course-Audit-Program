@@ -202,7 +202,7 @@ CourseBSTNode *searchCourseBSTNode(CourseBSTNode *root, char *courseCode)
    with minimum key value found in
    that tree. Note that the
    entire tree does not need to be searched. */
-CourseBSTNode *minValueNode(CourseBSTNode *root)
+CourseBSTNode *minValueCourseBSTNode(CourseBSTNode *root)
 {
     CourseBSTNode *current = root;
 
@@ -264,7 +264,7 @@ CourseBSTNode *removeCourseBSTNode(CourseBSTNode *root, char *courseCode)
         // node with two children:
         // Get the inorder successor
         // (smallest in the right subtree)
-        CourseBSTNode *temp = minValueNode(root->right);
+        CourseBSTNode *temp = minValueCourseBSTNode(root->right);
 
         // Copy the inorder
         // successor's content to this node
