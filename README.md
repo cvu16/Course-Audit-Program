@@ -56,7 +56,7 @@ as a pre-requisite for other courses.
   completed: CS 104, CS 150
   ```
   
- q: takes two parameters (degree name, course name)
+• q: takes two parameters (degree name, course name)
 removes the course from the requirements; if it is one of two courses in a disjunct (OR)
 convert the disjunct into an implicit conjunct (remove the OR)
 ```
