@@ -14,38 +14,48 @@ add a course (name, title, pre-requisites) to the department
   
  m: takes one parameter (student name)
 shows the courses student still has to take to satisfy the degree requirements
+```
   m Lavonda Tyson
   >
   CS 406
   CS 470
   OR CS 320, CS 420
   OR MATH 186, MATH 286, MATH 336
+  ```
   
  n: takes one parameter (student name)
 shows the courses that the student can take next to satisfy the degree requirements (i.e.,
 courses where the pre-requisites have been satisfied)
+```
   n Tyree Miller
   >
   CS 202
   CS 203
   CS 205
   MATH 186
+  ```
   
  r: takes two parameters (department, course name)
 removes a course from a department; also removes the course from degree requirements and
 as a pre-requisite for other courses.
+```
   r Computer Science, CS 420
+  ```
 
  p: the type parameter has an additional possible value: s - student
+```
   p s Tyree Miller
   >
   degree: Computer Science
   completed: CS 104, CS 150
+  ```
   
  q: takes two parameters (degree name, course name)
 removes the course from the requirements; if it is one of two courses in a disjunct (OR)
 convert the disjunct into an implicit conjunct (remove the OR)
+```
   q BS Computer Science, CS 470
+  ```
 
 ## Results
 ![Creation and Insertion Time](project31.PNG?raw=true "Creation Time")
