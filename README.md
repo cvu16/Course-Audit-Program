@@ -5,14 +5,20 @@ The purpose of this project is to create a program that will read students, degr
 
 ## Commands
 •	c COURSE ### (e.g. c CS 205): shows course title and pre-requisites
+
 •	d Degree Name (e.g. d AB Computer Science): shows course requirements for the degree
+
 •	s COURSE ### (e.g. s ENG 205): shows courses to take next and degrees corresponding to the course
+
 •	p type Name (e.g. p c ECON 101 OR p d Mathematics OR p g AB English): shows information associated with name. The type can be c - course, d - department, or g – degree
- a: takes fourparameters (department name, course name, course title, pre-requisites)
+
+• a: takes fourparameters (department name, course name, course title, pre-requisites)
 add a course (name, title, pre-requisites) to the department
+```
   a Computer Science, CS 206, Systems Software, CS 202, CS 203
+  ```
   
- m: takes one parameter (student name)
+• m: takes one parameter (student name)
 shows the courses student still has to take to satisfy the degree requirements
 ```
   m Lavonda Tyson
@@ -23,7 +29,7 @@ shows the courses student still has to take to satisfy the degree requirements
   OR MATH 186, MATH 286, MATH 336
   ```
   
- n: takes one parameter (student name)
+• n: takes one parameter (student name)
 shows the courses that the student can take next to satisfy the degree requirements (i.e.,
 courses where the pre-requisites have been satisfied)
 ```
@@ -35,14 +41,14 @@ courses where the pre-requisites have been satisfied)
   MATH 186
   ```
   
- r: takes two parameters (department, course name)
+• r: takes two parameters (department, course name)
 removes a course from a department; also removes the course from degree requirements and
 as a pre-requisite for other courses.
 ```
   r Computer Science, CS 420
   ```
 
- p: the type parameter has an additional possible value: s - student
+• p: the type parameter has an additional possible value: s - student
 ```
   p s Tyree Miller
   >
@@ -57,8 +63,8 @@ convert the disjunct into an implicit conjunct (remove the OR)
   q BS Computer Science, CS 470
   ```
 
-## Results
-![Creation and Insertion Time](project31.PNG?raw=true "Creation Time")
-![Print Time](project32.PNG?raw=true "Print Time")
-
-As hypothesized, an index of words from a text file is most efficiently created by using HashMap. However, when it comes to returning in alphabetical order, TreeMap is more efficient than HashMap, and ListMap might be more efficient than TreeMap. However, the running time is also affected by the number of non-dictionary words in the text.
+## Issues
+-	Memory allocation: Most of the memory used in the program has not been freed
+-	Student Struct: In the student struct, instead a courseBST for completed courses, the completed courses are stored in a linked list. This is not intentional but due to a oversight and I did not have ample to time to fix at the end when I realized.
+- `a` command can only work with a single prerequisite or multiple co-requisite. All multiple requisites (conjuncts) become disjuncts.
+- `m` and `n` do not record classes/degrees that have no requisites at all. For example, it will leave out intro courses even when they are required independently.
